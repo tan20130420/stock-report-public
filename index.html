@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 每日股票盘后报告 - 20260511</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header {
+            text-align: center; margin-bottom: 30px; color: white;
+        }
+        .header h1 { font-size: 36px; margin-bottom: 10px; }
+        .header p { font-size: 16px; opacity: 0.9; }
+        .date-selector {
+            text-align: center; margin-bottom: 30px;
+        }
+        .date-selector select {
+            padding: 10px 20px; border-radius: 20px; border: none;
+            font-size: 16px; background: white; color: #333;
+            cursor: pointer;
+        }
+        .update-time {
+            text-align: center; color: rgba(255,255,255,0.7);
+            font-size: 14px; margin-bottom: 30px;
+        }
+        .stats-bar {
+            display: flex; justify-content: center; gap: 30px;
+            margin-bottom: 30px; color: white;
+        }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 24px; font-weight: bold; }
+        .stat-label { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+        .stock-list {
+            background: white; border-radius: 20px;
+            padding: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .stock-item {
+            display: flex; align-items: center;
+            padding: 18px 20px; margin: 8px;
+            text-decoration: none; border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .stock-item:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .stock-item.up {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 1px solid #e57373;
+        }
+        .stock-item.down {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 1px solid #4caf50;
+        }
+        .stock-item.error {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border: 1px solid #999;
+            opacity: 0.7;
+        }
+        .rank {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: bold; margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .rank.gold { background: #ffd700; color: #333; }
+        .rank.silver { background: #c0c0c0; color: #333; }
+        .rank.bronze { background: #cd7f32; color: white; }
+        .rank.normal { background: #667eea; color: white; }
+        .stock-info { flex: 1; }
+        .stock-name { font-size: 20px; font-weight: bold; color: #1a1a2e; }
+        .stock-code-line { font-size: 13px; color: #666; margin-top: 3px; }
+        .type-tag {
+            display: inline-block; padding: 2px 8px; border-radius: 8px;
+            font-size: 11px; margin-left: 8px;
+        }
+        .type-tag.bond { background: #ff9800; color: white; }
+        .type-tag.etf { background: #2196f3; color: white; }
+        .stock-price {
+            text-align: right; margin-right: 15px;
+        }
+        .price { font-size: 24px; font-weight: bold; color: #1a1a2e; }
+        .change {
+            font-size: 16px; font-weight: bold;
+            margin-top: 4px;
+        }
+        .change.up { color: #e74c3c; }
+        .change.down { color: #2ecc71; }
+        .change.error { color: #999; }
+        .arrow {
+            font-size: 24px; color: #999;
+        }
+        .footer {
+            text-align: center; margin-top: 40px;
+            color: rgba(255,255,255,0.7); font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 28px; }
+            .stock-name { font-size: 16px; }
+            .price { font-size: 20px; }
+            .stats-bar { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 每日股票盘后报告</h1>
+            <p>22支核心标的涨跌幅排名（含股票/可转债/ETF）</p>
+        </div>
+
+        <div class="date-selector">
+            <select onchange="window.location.href=this.value ? 'index_' + this.value + '.html' : 'index.html'">
+                <option value="">📅 选择日期</option>
+                
+                <option value="20260511" selected>2026-05-11</option>
+                
+                <option value="20260511" selected>2026-05-11</option>
+                
+                <option value="20260509" >2026-05-09</option>
+                
+            </select>
+        </div>
+
+        <div class="update-time">当前显示：2026-05-11 | 数据来源：Yahoo Finance、东方财富</div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">14</div>
+                <div class="stat-label">上涨 📈</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">下跌 📉</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">22</div>
+                <div class="stat-label">总计</div>
+            </div>
+        </div>
+
+        <div class="stock-list">
+            
+            <a href="output/20260511/300059_report.html" class="stock-item up">
+                <div class="rank gold">
+                    1
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        东方财富
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        300059.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">21.28元</div>
+                    <div class="change up">
+                        ▲ +3.86%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600089_report.html" class="stock-item up">
+                <div class="rank silver">
+                    2
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        特变电工
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600089.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">27.98元</div>
+                    <div class="change up">
+                        ▲ +2.87%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600027_report.html" class="stock-item up">
+                <div class="rank bronze">
+                    3
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        华电国际
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600027.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">5.23元</div>
+                    <div class="change up">
+                        ▲ +1.95%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/000429_report.html" class="stock-item up">
+                <div class="rank normal">
+                    4
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        粤高速A
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        000429.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">12.90元</div>
+                    <div class="change up">
+                        ▲ +1.65%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/300003_report.html" class="stock-item up">
+                <div class="rank normal">
+                    5
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        乐普医疗
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        300003.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">14.70元</div>
+                    <div class="change up">
+                        ▲ +1.45%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/000066_report.html" class="stock-item up">
+                <div class="rank normal">
+                    6
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        中国长城
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        000066.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">23.40元</div>
+                    <div class="change up">
+                        ▲ +1.34%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/601006_report.html" class="stock-item up">
+                <div class="rank normal">
+                    7
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        大秦铁路
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        601006.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">5.38元</div>
+                    <div class="change up">
+                        ▲ +1.13%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/000895_report.html" class="stock-item up">
+                <div class="rank normal">
+                    8
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        双汇发展
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        000895.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">27.15元</div>
+                    <div class="change up">
+                        ▲ +0.97%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/000725_report.html" class="stock-item up">
+                <div class="rank normal">
+                    9
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        京东方A
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        000725.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">4.19元</div>
+                    <div class="change up">
+                        ▲ +0.48%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/516660_report.html" class="stock-item up">
+                <div class="rank normal">
+                    10
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        新能源车ETF华安
+                        
+                        <span class="type-tag etf">ETF</span>
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        516660.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">1.31元</div>
+                    <div class="change up">
+                        ▲ +0.46%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/000423_report.html" class="stock-item up">
+                <div class="rank normal">
+                    11
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        东阿阿胶
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        000423.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">53.88元</div>
+                    <div class="change up">
+                        ▲ +0.41%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600377_report.html" class="stock-item up">
+                <div class="rank normal">
+                    12
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        宁沪高速
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600377.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">12.23元</div>
+                    <div class="change up">
+                        ▲ +0.25%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600917_report.html" class="stock-item up">
+                <div class="rank normal">
+                    13
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        重庆燃气
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600917.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">5.30元</div>
+                    <div class="change up">
+                        ▲ +0.19%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600900_report.html" class="stock-item up">
+                <div class="rank normal">
+                    14
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        长江电力
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600900.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">27.01元</div>
+                    <div class="change up">
+                        ▲ +0.04%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/118033_report.html" class="stock-item error">
+                <div class="rank normal">
+                    15
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        华特转债
+                        
+                        <span class="type-tag bond">转债</span>
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        118033.SH
+                        | <span style="color:red;">数据异常</span>
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">--</div>
+                    <div class="change error">获取失败</div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/128136_report.html" class="stock-item error">
+                <div class="rank normal">
+                    16
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        立讯转债
+                        
+                        <span class="type-tag bond">转债</span>
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        128136.SZ
+                        | <span style="color:red;">数据异常</span>
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">--</div>
+                    <div class="change error">获取失败</div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600820_report.html" class="stock-item up">
+                <div class="rank normal">
+                    17
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        隧道股份
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600820.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">5.93元</div>
+                    <div class="change up">
+                        ▲ +0.00%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/601618_report.html" class="stock-item up">
+                <div class="rank normal">
+                    18
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        中国中冶
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        601618.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">2.97元</div>
+                    <div class="change up">
+                        ▲ +0.00%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/600588_report.html" class="stock-item down">
+                <div class="rank normal">
+                    19
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        用友网络
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        600588.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">12.38元</div>
+                    <div class="change down">
+                        ▼ -0.08%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/601288_report.html" class="stock-item down">
+                <div class="rank normal">
+                    20
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        农业银行
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        601288.SH
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">6.81元</div>
+                    <div class="change down">
+                        ▼ -1.30%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/002368_report.html" class="stock-item down">
+                <div class="rank normal">
+                    21
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        太极股份
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        002368.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">17.37元</div>
+                    <div class="change down">
+                        ▼ -1.36%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+            <a href="output/20260511/300422_report.html" class="stock-item down">
+                <div class="rank normal">
+                    22
+                </div>
+                <div class="stock-info">
+                    <div class="stock-name">
+                        博世科
+                        
+                    </div>
+                    <div class="stock-code-line">
+                        300422.SZ
+                        
+                    </div>
+                </div>
+                <div class="stock-price">
+                    
+                    <div class="price">5.80元</div>
+                    <div class="change down">
+                        ▼ -1.53%
+                    </div>
+                    
+                </div>
+                <div class="arrow">›</div>
+            </a>
+            
+        </div>
+
+        <div class="footer">
+            <p>⚠️ 免责声明：本报告仅基于公开信息整理，不构成任何投资建议</p>
+            <p>点击卡片查看完整分析报告 | 股票数据来自Yahoo Finance，转债/ETF来自东方财富</p>
+        </div>
+    </div>
+</body>
+</html>
