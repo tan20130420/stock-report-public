@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>隧道股份(600820) 盘后报告 20260602</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #e0d6f0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* ===== 头部 ===== */
+.header {
+    text-align: center;
+    padding: 35px 20px 25px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, rgba(88, 28, 135, 0.4), rgba(139, 92, 246, 0.2));
+    border-radius: 20px;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+.header::before {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+.header h1 {
+    font-size: 2em;
+    background: linear-gradient(90deg, #c084fc, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative; z-index: 1;
+}
+.header .subtitle {
+    color: #a78bfa; margin-top: 6px; font-size: 0.95em;
+    position: relative; z-index: 1;
+}
+
+/* ===== 卡片 ===== */
+.stock-card {
+    background: rgba(88, 28, 135, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 22px;
+    transition: border-color 0.3s;
+}
+.stock-card:hover { border-color: rgba(139, 92, 246, 0.5); }
+
+/* ===== 头部信息 ===== */
+.stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.stock-name { font-size: 1.4em; font-weight: 700; color: #e0d6f0; }
+.stock-code { font-size: 0.85em; color: #a78bfa; margin-left: 8px; }
+.stock-type-badge {
+    display: inline-block; padding: 2px 10px;
+    border-radius: 10px; font-size: 0.75em; font-weight: 600; margin-left: 8px;
+}
+.badge-stock { background: rgba(99, 102, 241, 0.3); color: #a5b4fc; }
+.badge-bond { background: rgba(234, 179, 8, 0.3); color: #fde047; }
+.badge-etf { background: rgba(34, 197, 94, 0.3); color: #86efac; }
+
+.stock-price-area { text-align: right; }
+.stock-price { font-size: 2em; font-weight: 800; }
+.stock-change { font-size: 1em; font-weight: 600; margin-top: 2px; }
+
+/* ===== 网格 ===== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin-bottom: 18px;
+}
+.card-grid-sm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 18px;
+}
+.metric {
+    background: rgba(30, 20, 60, 0.5);
+    border-radius: 10px; padding: 12px;
+}
+.metric .m-label { font-size: 0.75em; color: #8b7f9e; margin-bottom: 4px; }
+.metric .m-value { font-size: 1.1em; font-weight: 600; color: #e0d6f0; }
+
+/* ===== 子标题 ===== */
+.section-title {
+    font-size: 1em; font-weight: 600; color: #c4b5fd;
+    margin: 18px 0 10px; padding-bottom: 6px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    display: flex; align-items: center; gap: 6px;
+}
+.section-title::before {
+    content: "\25C6"; color: #8b5cf6; font-size: 0.7em;
+}
+
+/* ===== K线表格 ===== */
+.kline-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.85em; margin-top: 8px;
+}
+.kline-table th {
+    background: rgba(88, 28, 135, 0.4); color: #c4b5fd;
+    padding: 8px 10px; text-align: center; font-weight: 600; white-space: nowrap;
+}
+.kline-table td {
+    padding: 7px 10px; text-align: center;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1); white-space: nowrap;
+}
+.kline-table tr:last-child td { border-bottom: none; }
+.kline-table .latest-row {
+    background: rgba(139, 92, 246, 0.15); font-weight: 600;
+}
+
+/* ===== 资金流向条 ===== */
+.flow-bar {
+    display: flex; align-items: center;
+    gap: 8px; margin: 4px 0; font-size: 0.85em;
+}
+.flow-label { width: 60px; text-align: right; color: #a78bfa; flex-shrink: 0; }
+.flow-bar-wrap {
+    flex: 1; height: 18px;
+    background: rgba(30, 20, 60, 0.5);
+    border-radius: 9px; overflow: hidden;
+}
+.flow-bar-fill {
+    height: 100%; border-radius: 9px; transition: width 0.5s ease;
+}
+.flow-bar-fill.inflow { background: linear-gradient(90deg, #dc2626, #ff4d4f); }
+.flow-bar-fill.outflow { background: linear-gradient(90deg, #52c41a, #389e0d); }
+.flow-val { width: 80px; text-align: right; flex-shrink: 0; font-weight: 600; }
+
+/* ===== 公告列表 ===== */
+.notice-list { list-style: none; padding: 0; }
+.notice-list li {
+    padding: 8px 12px; margin-bottom: 4px;
+    background: rgba(30, 20, 60, 0.4);
+    border-radius: 8px; font-size: 0.85em;
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 10px;
+}
+.notice-list li .notice-title {
+    color: #e0d6f0; flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.notice-list li .notice-date { color: #8b7f9e; flex-shrink: 0; font-size: 0.9em; }
+.notice-empty { color: #666; font-size: 0.85em; text-align: center; padding: 12px; }
+
+/* ===== 板块标签 ===== */
+.sector-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(88, 28, 135, 0.35);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px; padding: 6px 14px; font-size: 0.9em;
+}
+.sector-tag .sector-name { color: #c4b5fd; font-weight: 600; }
+
+/* ===== 概念标签 ===== */
+.concept-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.concept-tag {
+    display: inline-block; padding: 3px 10px;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px; font-size: 0.78em; color: #a5b4fc;
+}
+
+/* ===== 机构评级 ===== */
+.rating-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; text-align: center;
+}
+.rating-item {
+    background: rgba(30, 20, 60, 0.5);
+    border-radius: 10px; padding: 10px;
+}
+.rating-item .r-num { font-size: 1.3em; font-weight: 700; }
+.rating-item .r-label { font-size: 0.75em; color: #8b7f9e; margin-top: 2px; }
+.r-buy { color: #ff4d4f; }
+.r-hold { color: #faad14; }
+.r-target { color: #c4b5fd; }
+
+/* ===== 股东表格 ===== */
+.holder-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.82em; margin-top: 8px;
+}
+.holder-table th {
+    background: rgba(88, 28, 135, 0.4); color: #c4b5fd;
+    padding: 7px 10px; text-align: left; font-weight: 600;
+}
+.holder-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+/* ===== 业务亮点 ===== */
+.business-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+.biz-item {
+    background: rgba(30, 20, 60, 0.4);
+    border-radius: 10px; padding: 10px 12px;
+}
+.biz-item .b-label { font-size: 0.75em; color: #8b7f9e; }
+.biz-item .b-value { font-size: 1em; font-weight: 600; color: #e0d6f0; margin-top: 2px; }
+.biz-highlight .b-value { color: #c084fc; }
+
+/* ===== 量价分析卡 ===== */
+.vpa-box {
+    background: rgba(30, 20, 60, 0.5);
+    border-radius: 12px; padding: 16px;
+}
+.vpa-row {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 6px 0;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1); font-size: 0.9em;
+}
+.vpa-row:last-child { border-bottom: none; }
+.vpa-label { color: #a78bfa; }
+.vpa-value { font-weight: 600; }
+
+/* ===== 风险提示 ===== */
+.risk-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.risk-item {
+    display: inline-block; padding: 3px 10px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 12px; font-size: 0.78em; color: #fca5a5;
+}
+
+/* ===== 页脚 ===== */
+.footer {
+    text-align: center; padding: 30px 20px;
+    color: #666; font-size: 0.8em;
+}
+
+@media (max-width: 768px) {
+    .header h1 { font-size: 1.5em; }
+    .stock-price { font-size: 1.5em; }
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-sm { grid-template-columns: repeat(2, 1fr); }
+    .rating-grid { grid-template-columns: repeat(3, 1fr); }
+    .business-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- 头部 -->
+<div class="header">
+    <h1>隧道股份(600820)</h1>
+    <div class="subtitle">20260602 盘后报告 | 生成时间 07:41</div>
+</div>
+
+<div class="stock-card">
+    <!-- 名称、价格、涨跌 -->
+    <div class="stock-header">
+        <div>
+            <span class="stock-name">隧道股份</span>
+            <span class="stock-code">600820</span>
+            
+            <span class="stock-type-badge badge-stock">SH</span>
+            
+            
+        </div>
+        <div class="stock-price-area">
+            <div class="stock-price" style="color:#ff4d4f">5.8</div>
+            <div class="stock-change" style="color:#ff4d4f">
+                +0.35%
+                 | 振幅 1.57%
+            </div>
+        </div>
+    </div>
+
+    <!-- 行情数据 -->
+    <div class="card-grid-sm">
+        <div class="metric">
+            <div class="m-label">今开</div>
+            <div class="m-value">5.77</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">最高</div>
+            <div class="m-value" style="color:#ff4d4f">5.82</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">最低</div>
+            <div class="m-value" style="color:#52c41a">5.73</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">昨收</div>
+            <div class="m-value">5.78</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">成交量</div>
+            <div class="m-value">1865万</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">成交额</div>
+            <div class="m-value">1.08亿元</div>
+        </div>
+    </div>
+
+    
+
+    <!-- ===== 走势复盘 - 近5日K线 ===== -->
+    
+    <div class="section-title">走势复盘 · 近5日K线</div>
+    <div style="overflow-x:auto;">
+    <table class="kline-table">
+        <thead>
+            <tr>
+                <th>日期</th><th>收盘价</th><th>最高</th><th>最低</th><th>成交量</th><th>涨跌幅</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            <tr class="">
+                <td>05-27</td>
+                <td style="font-weight:600">5.62</td>
+                <td style="color:#ff4d4f">5.69</td>
+                <td style="color:#52c41a">5.58</td>
+                <td>1450万</td>
+                <td style="color:#ff4d4f;font-weight:600">+0.18%</td>
+            </tr>
+        
+            <tr class="">
+                <td>05-28</td>
+                <td style="font-weight:600">5.61</td>
+                <td style="color:#ff4d4f">5.65</td>
+                <td style="color:#52c41a">5.55</td>
+                <td>1471万</td>
+                <td style="color:#52c41a;font-weight:600">-2.43%</td>
+            </tr>
+        
+            <tr class="">
+                <td>05-29</td>
+                <td style="font-weight:600">5.75</td>
+                <td style="color:#ff4d4f">5.8</td>
+                <td style="color:#52c41a">5.65</td>
+                <td>2791万</td>
+                <td style="color:#52c41a;font-weight:600">-0.52%</td>
+            </tr>
+        
+            <tr class="">
+                <td>06-01</td>
+                <td style="font-weight:600">5.78</td>
+                <td style="color:#ff4d4f">5.79</td>
+                <td style="color:#52c41a">5.71</td>
+                <td>1868万</td>
+                <td style="color:#52c41a;font-weight:600">-0.34%</td>
+            </tr>
+        
+            <tr class="latest-row">
+                <td>06-02</td>
+                <td style="font-weight:600">5.8</td>
+                <td style="color:#ff4d4f">5.82</td>
+                <td style="color:#52c41a">5.73</td>
+                <td>1865万</td>
+                <td style="color:#ff4d4f;font-weight:600">+0.35%</td>
+            </tr>
+        
+        </tbody>
+    </table>
+    </div>
+    
+
+    <!-- ===== 量价分析 ===== -->
+    <div class="section-title">量价分析</div>
+    <div class="vpa-box">
+        <div class="vpa-row">
+            <span class="vpa-label">量比</span>
+            <span class="vpa-value" style="color:#52c41a">0.98</span>
+        </div>
+        <div class="vpa-row">
+            <span class="vpa-label">换手率</span>
+            <span class="vpa-value">0.72%</span>
+        </div>
+        <div class="vpa-row">
+            <span class="vpa-label">振幅</span>
+            <span class="vpa-value">1.57%</span>
+        </div>
+        <div class="vpa-row">
+            <span class="vpa-label">5日量能趋势</span>
+            <span class="vpa-value">
+                
+                    
+                    
+                    
+                    平量
+                
+            </span>
+        </div>
+    </div>
+
+    <!-- ===== 所属板块 ===== -->
+    
+
+    <!-- ===== 近期公告 ===== -->
+    <div class="section-title">近期公告</div>
+    
+    <div class="notice-empty">暂无近期公告数据</div>
+    
+
+    <!-- 基本面 -->
+    <div class="section-title">基本面指标</div>
+    <div class="card-grid">
+        <div class="metric">
+            <div class="m-label">总市值</div>
+            <div class="m-value">182.36亿</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">PE(TTM)</div>
+            <div class="m-value">9.06</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">PB</div>
+            <div class="m-value">0.57</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">股息率</div>
+            <div class="m-value">519.0%</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">ROE</div>
+            <div class="m-value">5.18%</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">Beta</div>
+            <div class="m-value">0.213</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">52周最低</div>
+            <div class="m-value" style="color:#52c41a">5.55</div>
+        </div>
+        <div class="metric">
+            <div class="m-label">52周最高</div>
+            <div class="m-value" style="color:#ff4d4f">8.17</div>
+        </div>
+    </div>
+
+    <!-- 资金流向 -->
+    
+
+    <!-- 机构评级 -->
+    
+
+    <!-- 业务亮点 -->
+    
+
+    <!-- 概念标签 -->
+    
+    <div class="section-title">核心概念</div>
+    <div class="concept-tags">
+        
+        <span class="concept-tag" title="A股上市公司">股票</span>
+        
+    </div>
+    
+
+    <!-- 十大股东 -->
+    
+
+    <!-- 股东户数 -->
+    
+
+    <!-- 风险提示 -->
+    
+    <div class="section-title">风险提示</div>
+    <div class="risk-list">
+        
+        <span class="risk-item">市场波动风险</span>
+        
+        <span class="risk-item">行业政策风险</span>
+        
+        <span class="risk-item">宏观经济风险</span>
+        
+        <span class="risk-item">个股特有风险</span>
+        
+    </div>
+    
+
+    
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+    <p>数据来源：Yahoo Finance / 东方财富 | 仅供参考，不构成投资建议</p>
+    <p>生成时间：20260602 07:41</p>
+</div>
+
+</div>
+</body>
+</html>
